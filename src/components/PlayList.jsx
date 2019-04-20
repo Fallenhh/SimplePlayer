@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
-import { List, Button } from 'antd';
+import { List, Button, Input } from 'antd';
 class PlayList extends Component {
     state = {}
     render() {
         return (
             <div>
+                <Input
+                    placeholder="Playlist Id e.g. 82954460"
+                    onChange={this.props.handleChangePlaylist}
+                />
+                <Button
+                    onClick={this.props.handleSongList}
+                    type="primary">
+                    Get
+                </Button>
 
-                <Button onClick={this.props.getSongList} type="primary">log</Button>
                 <List
                     size="small"
                     itemLayout="horizontal"

@@ -9,7 +9,8 @@ class Music extends Component {
         volume: 100,
         songList: [
             { index: 0, uri: "./test.mp3", title: "Discovery", artist: "Electro-Light" }],
-        currentIndex: 0
+        currentIndex: 0,
+        playlistId: "82954460",
     };
 
 
@@ -84,9 +85,15 @@ class Music extends Component {
         });
     }
 
+    onChangePlaylist = (e) => {
+        const { value } = e.target;
+        console.log(value);
+        this.setState({ playlistId: value });
+    }
+
     getSongList = () => {
         console.log('test');
-        fetch('http://musicapi.leanapp.cn/playlist/detail?id=82954460')
+        fetch(`http://localhost:4000/playlist/detail?id=${this.state.playlistId}`)
             .then(response => {
                 return response.json();
             })
@@ -96,12 +103,17 @@ class Music extends Component {
                 const { trackIds } = playlist;
                 this.setState({
                     songList: trackIds.map((track, index) => {
-                        return { index: index, uri: `https://music.163.com/song/media/outer/url?id=${track.id}.mp3`, title: 'test', artist: 'test' }
+                        return {
+                            index: index,
+                            uri: `https://music.163.com/song/media/outer/url?id=${track.id}.mp3`,
+                            title: 'test',
+                            artist: 'test'
+                        }
 
                     })
                     , currentIndex: 0
                 }, () => { this.audio.src = this.state.songList[this.state.currentIndex].uri })
-            });
+            }).catch(err => { console.log(err) });
     }
 
     render() {
@@ -127,7 +139,8 @@ class Music extends Component {
                     <PlayList
                         songList={this.state.songList}
                         currentIndex={this.state.currentIndex}
-                        getSongList={this.getSongList}
+                        handleSongList={this.getSongList}
+                        handleChangePlaylist={this.onChangePlaylist}
                     />
                 </div>
             </div>
